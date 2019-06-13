@@ -16,13 +16,7 @@
                 <div class="col-sm-7 col-md-7 col-lg-7">
 
                     <unlockBike v-for="bike in bikes" :key="bike.id" :bike="bike"></unlockBike>
-                    <!--<unlockBike></unlockBike>-->
-                    <!--<unlockBike></unlockBike>-->
-                    <!--<unlockBike></unlockBike>-->
-                    <!--<unlockBike></unlockBike>-->
-                    <!--<unlockBike></unlockBike>-->
-                    <!--<unlockBike></unlockBike>-->
-                    <!--<unlockBike></unlockBike>-->
+
                 </div>
             </div>
         </div>

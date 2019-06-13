@@ -4,6 +4,9 @@
 @import "~@material/textfield/mdc-text-field";
 
 
+$background: #ffff;
+.mdc-text-field{@include mdc-text-field-fill-color($background)};
+
 body{
     background: white;
 }

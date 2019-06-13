@@ -5,12 +5,8 @@ export default class Authenticate{
         return await Api().post('/auth/login',userData);
     }
 
-    static async handleToken(code,token){
-        return await Api().post('/auth/verification',{code},{
-            headers:{
-                Authenticate: `Bearer ${token}`
-            }
-        });
+    static async handleToken(data){
+        return await Api().post('/auth/verification',data);
     }
 
 }

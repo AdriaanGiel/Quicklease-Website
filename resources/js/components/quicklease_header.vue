@@ -17,7 +17,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .header{
         padding: 5%;
         width: 100%;
@@ -26,7 +26,7 @@
                 rgba(211,211,211, 0.45),
                 rgba(211,211,211, 0.45)
         ),
-        url("../../images/map.png");
+        url("../../../public/images/map.png");
     }
     .leaseplanButton{
         width: 26%;

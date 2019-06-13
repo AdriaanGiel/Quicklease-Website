@@ -1,12 +1,19 @@
 <template>
     <div class="logout_btn">
-        <div><span>Uitloggen</span></div>
+        <div @click="logOut"><span>Uitloggen</span></div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "logout"
+        name: "logout",
+        methods:{
+            logOut(){
+                this.$store.commit('DESTROY_TOKEN',() => {
+                    this.$router.push({name: 'login'});
+                });
+            }
+        }
     }
 </script>
 
