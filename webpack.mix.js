@@ -13,8 +13,8 @@ const webpack = require('webpack');
  */
 
 
-mix.js('resources/js/main.js', 'public/javascript/app.js')
-    .sass('resources/styles/main.scss', 'public/stylesheets/app.css', {
+mix.js('resources/js/main.js', 'docs/javascript/app.js')
+    .sass('resources/styles/main.scss', 'docs/stylesheets/app.css', {
         includePaths: ['node_modules']
     })
     .extract(['vue','vue-router','bootstrap'])

@@ -57,7 +57,7 @@
 /******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 	// Promise = chunk loading, 0 = chunk loaded
 /******/ 	var installedChunks = {
-/******/ 		"/public/javascript/manifest": 0
+/******/ 		"/docs/javascript/manifest": 0
 /******/ 	};
 /******/
 /******/ 	var deferredModules = [];

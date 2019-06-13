@@ -4872,6 +4872,10 @@
     transform: translateX(calc(0 - 0%)) translateY(-130%) scale(0.75);
   }
 }
+.mdc-text-field:not(.mdc-text-field--disabled) {
+  background-color: #ffff;
+}
+
 body {
   background: white;
 }

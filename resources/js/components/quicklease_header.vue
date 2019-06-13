@@ -26,7 +26,7 @@
                 rgba(211,211,211, 0.45),
                 rgba(211,211,211, 0.45)
         ),
-        url("../../../public/images/map.png");
+        url("../../../docs/images/map.png");
     }
     .leaseplanButton{
         width: 26%;

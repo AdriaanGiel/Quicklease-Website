@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["/public/javascript/vendor"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["/docs/javascript/vendor"],{
 
 /***/ "./node_modules/bootstrap/dist/js/npm.js":
 /*!***********************************************!*\
