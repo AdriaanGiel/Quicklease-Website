@@ -8,6 +8,5 @@ window.VueRouter = VueRouter;
 window.axios = require('axios');
 
 Vue.use(VueRouter);
-// Vue.use(uiv);
 
 // Vue.use(Field);

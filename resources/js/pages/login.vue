@@ -1,42 +1,52 @@
 <template>
     <div class="background">
-        <div class="container">
+        <div class="container test">
             <div class="logincircle">
             </div>
             <div class="logo">
                 <IconBase x="0px" y="0px" width="100%" height="100%" viewBox="0 0 803 903" icon="Logo"><Logo class="logosvg"></Logo></IconBase>
             </div>
                 <div class="loginform forminputs">
+
                     <form class="form" action="/" method="post">
 
-                            <div class="inputs" v-if="showForm">
-                                <div class="mdc-text-field">
-                                    <input class="mdc-text-field__input" v-model="userData.email" type="email">
-                                    <div class="mdc-line-ripple"></div>
-                                    <label class="mdc-floating-label">Email</label>
-                                </div>
-                                <div class="mdc-text-field">
-                                    <input class="mdc-text-field__input" v-model="userData.password" type="password">
-                                    <div class="mdc-line-ripple"></div>
-                                    <label class="mdc-floating-label">Wachtwoord</label>
-                                </div>
+
+                        <div class="inputs" v-if="showForm">
+
+                            <div v-if="error">
+                                <span>{{ error }}</span>
                             </div>
 
-                            <div v-else class="verification-input-box">
-                                <div class="mdc-text-field">
-                                    <input class="mdc-text-field__input" style="margin: 0px auto;display: block;width: 50%;" v-model="verificationCode" type="number">
-                                    <div class="mdc-line-ripple"></div>
-                                    <label class="mdc-floating-label">Email</label>
-                                </div>
+                            <div class="mdc-text-field">
+                                <input class="mdc-text-field__input" v-model="userData.email" type="email">
+                                <label class="mdc-floating-label">Email</label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <div class="mdc-text-field">
+                                <input id="pw" class="mdc-text-field__input" v-model="userData.password" type="password">
+                                <label for="pw" class="mdc-floating-label">Wachtwoord</label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                        </div>
 
+                        <div v-else class="inputs">
+                            <div class="mdc-text-field">
+                                <input class="mdc-text-field__input" style="margin: 0px auto;display: block;width: 50%;" v-model="verificationCode" type="number">
+                                <div class="mdc-line-ripple"></div>
+                                <label class="mdc-floating-label">Email</label>
                             </div>
 
-                            <div class="button-box btninput">
-                                <button @click="this.loginAndSwitchToVerification" class="btn btn-default" type="submit">Submit <i v-if="showLoader" class="fas fa-spin fa-sync-alt"></i></button>
-                            </div>
+                        </div>
+
+                        <div class="button-box btninput">
+                            <button v-if="!submitForm" @click="this.loginAndSwitchToVerification" class="btn btn-default" type="submit">Login <i v-if="showLoader" class="fas fa-spin fa-sync-alt"></i></button>
+
+                            <button v-else @click="this.verifyCode" class="btn btn-default" type="submit">Verifieer <i v-if="showLoader" class="fas fa-spin fa-sync-alt"></i></button>
+                        </div>
 
                     </form>
                 </div>
+
             </div>
     </div>
 </template>
@@ -74,10 +84,12 @@
                     email: "",
                     password: ""
                 },
+                error:"",
                 submitForm:true,
                 showLoader: false,
                 verificationCode:0,
-                token:""
+                token:"",
+                nexmo:{}
             }
         },
         methods:{
@@ -88,21 +100,59 @@
                 e.preventDefault();
                 this.showLoader = true;
                 Auth.getToken(this.userData).then((res) => {
-                    this.token = res.data.token;
+                    if(res.data.token !== undefined){
+                        console.log(res.data.token);
+                        this.token = res.data.token;
+                        this.nexmo = res.data.data;
+                        this.showLoader = false;
+                        this.showForm = false;
+                        this.submitForm = true;
+                        this.error = "";
+
+                    }
+                }).catch((error,message) => {
+                    this.error = "Uw username of wachtwoord klopt niet.";
                     this.showLoader = false;
-                    this.showForm = false;
-                    this.submitForm = true;
                 });
             },
             async verifyCode(e){
                 e.preventDefault();
+                this.showLoader = true;
+                let data = {
+                    code: this.verificationCode,
+                    request_id: this.nexmo.request_id,
+                    token: this.token
+                };
 
-                Auth.handleToken(code,this.token).then((res) => {
+                Auth.handleToken(data).then((res) => {
+                    let status = res.data.result.status;
+                    let token = res.data.result.token;
 
+                    if(parseInt(status) !== 16){
+                        if(token !== undefined){
+                            this.$store.commit("SET_TOKEN", token);
+                            this.showLoader = false;
+                            this.$route.push({name:'dashboard'});
+                        }
+                    }else{
+                        this.error = "Deze code klopt niet";
+                        this.showLoader = false;
+                    }
+
+
+                }).catch((error) => {
+                    this.error = "Er klopt iets niet";
+                    this.showLoader = false;
                 });
             }
         },
+        beforeCreate(){
+            if(this.$store.getters.loggedIn){
+                this.$router.push({name: 'dashboard'});
+            }
+        },
         mounted(){
+            console.log();
             const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
         },
 
@@ -112,7 +162,12 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+    .test{
+        display: flex;
+    }
+
     .body{
         overflow: hidden;
     }
@@ -177,7 +232,8 @@
 
     .forminputs{
         width: 600px;
-        margin: 50% auto 20% auto;
+        /*margin: 50% auto 20% auto;*/
+        align-self: center;
         opacity: 0;
         animation-name: loginfadein;
         animation-duration: 1s;
@@ -187,9 +243,16 @@
     }
 
     .inputs{
-        display: block;
+        align-self: center;
+        display: flex;
+        height: 100%;
         margin: 0px auto;
-        width: 50%;
+        width: 100%;
+        flex-direction: column;
+        div{
+            width: 60%;
+            margin: .2em auto;
+        }
     }
     .verification-input-box{
         margin: 0px auto;

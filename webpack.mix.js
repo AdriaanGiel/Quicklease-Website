@@ -13,12 +13,14 @@ const webpack = require('webpack');
  */
 
 
-
 mix.js('resources/js/main.js', 'public/javascript/app.js')
     .sass('resources/styles/main.scss', 'public/stylesheets/app.css', {
         includePaths: ['node_modules']
     })
-    .extract(['vue','vue-router','bootstrap']);
+    .extract(['vue','vue-router','bootstrap'])
+    .options({
+    processCssUrls: false // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
+});
 
 // Full API
 // mix.js(src, output);

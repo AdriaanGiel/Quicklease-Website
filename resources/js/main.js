@@ -7,6 +7,9 @@ require('./bootstrap');
 
 import router from './routes/routes';
 import * as VueGoogleMaps from "vue2-google-maps";
+import store from './store';
+import middleware from './routes/middleware';
+
 
 Vue.use(VueGoogleMaps, {
     load: {
@@ -15,9 +18,12 @@ Vue.use(VueGoogleMaps, {
     }
 });
 
+middleware(router,store);
+
 const app = new Vue({
     el: '#app',
-    router: router
+    router: router,
+    store:store
 });
 
 // $.material.init()
